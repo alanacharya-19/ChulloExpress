@@ -8,6 +8,8 @@ export const foods = [
     time: 25,
     freeDelivery: true,
     discount: 20,
+    veg: false,
+    description: "Juicy beef patty with melted cheddar, fresh lettuce, tomatoes, and our signature sauce between toasted brioche buns.",
     image: {
       uri: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
     },
@@ -21,6 +23,8 @@ export const foods = [
     time: 30,
     freeDelivery: false,
     discount: 15,
+    veg: false,
+    description: "Wood-fired crust topped with tender chicken, bell peppers, onions, mozzarella, and our house-made marinara sauce.",
     image: {
       uri: "https://images.unsplash.com/photo-1548365328-9f547f2a2a0f",
     },
@@ -34,6 +38,8 @@ export const foods = [
     time: 15,
     freeDelivery: true,
     discount: 10,
+    veg: true,
+    description: "Steamed dumplings stuffed with a flavorful mix of finely chopped vegetables, served with spicy tomato chutney.",
     image: {
       uri: "https://images.unsplash.com/photo-1604908177522-040f8d0a7b3a",
     },
@@ -47,6 +53,8 @@ export const foods = [
     time: 40,
     freeDelivery: false,
     discount: 25,
+    veg: false,
+    description: "Aromatic basmati rice layered with marinated chicken, caramelized onions, saffron, and traditional spices.",
     image: {
       uri: "https://images.unsplash.com/photo-1604908554161-2f2f1b1c1c1c",
     },
@@ -60,6 +68,8 @@ export const foods = [
     time: 10,
     freeDelivery: true,
     discount: 0,
+    veg: true,
+    description: "Golden crispy fries seasoned with herbs, served with ketchup and mayo dipping sauces.",
     image: {
       uri: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5",
     },
@@ -73,6 +83,8 @@ export const foods = [
     time: 20,
     freeDelivery: true,
     discount: 5,
+    veg: true,
+    description: "Toasted whole wheat bread with grilled vegetables, cheese, and pesto spread. A healthy and delicious choice.",
     image: {
       uri: "https://images.unsplash.com/photo-1550507992-eb63ffee0847",
     },

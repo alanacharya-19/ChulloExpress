@@ -1,6 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 type OrderCardProps = {
   id: string;
@@ -11,6 +11,7 @@ type OrderCardProps = {
   estimatedTime?: string;
   rating?: number;
   items: { name: string; quantity: number; image: any }[];
+  onPress?: (id: string) => void;
   onTrack?: (id: string) => void;
   onReorder?: (id: string) => void;
 };
@@ -30,13 +31,14 @@ export default function OrderCard({
   estimatedTime,
   rating,
   items,
+  onPress,
   onTrack,
   onReorder,
 }: OrderCardProps) {
   const sc = statusColors[status];
 
   return (
-    <View className="bg-[#F4F4F4] rounded-3xl p-4 mb-4 mx-5">
+    <Pressable className="bg-[#F4F4F4] rounded-3xl p-4 mb-4 mx-5" onPress={() => onPress?.(id)}>
       {/* Header */}
       <View className="flex-row items-center justify-between mb-3">
         <View>
@@ -98,31 +100,19 @@ export default function OrderCard({
 
       {/* Actions */}
       <View className="flex-row gap-3">
-        {status === "active" && (
-          <TouchableOpacity
-            className="flex-1 bg-[#FF6B00] py-3 rounded-xl items-center"
-            onPress={() => onTrack?.(id)}
-          >
+        {status === "active" ? (
+          <TouchableOpacity className="flex-1 bg-[#FF6B00] py-3 rounded-xl items-center" onPress={() => onTrack?.(id)}>
             <Text className="text-white font-bold text-sm">Track Order</Text>
           </TouchableOpacity>
-        )}
-        {status === "delivered" && (
+        ) : (
           <TouchableOpacity
-            className="flex-1 bg-[#FF6B00] py-3 rounded-xl items-center"
+            className={`flex-1 py-3 rounded-xl items-center ${status === "cancelled" ? "bg-gray-300" : "bg-[#FF6B00]"}`}
             onPress={() => onReorder?.(id)}
           >
-            <Text className="text-white font-bold text-sm">Reorder</Text>
-          </TouchableOpacity>
-        )}
-        {status === "cancelled" && (
-          <TouchableOpacity
-            className="flex-1 bg-gray-300 py-3 rounded-xl items-center"
-            onPress={() => onReorder?.(id)}
-          >
-            <Text className="text-gray-600 font-bold text-sm">Reorder</Text>
+            <Text className={`font-bold text-sm ${status === "cancelled" ? "text-gray-600" : "text-white"}`}>Reorder</Text>
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </Pressable>
   );
 }

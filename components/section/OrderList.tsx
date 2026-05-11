@@ -1,16 +1,51 @@
 import OrderCard from "@/components/item/OrderCard";
-import { orders, type Order } from "@/sample/order";
+import { useCart } from "@/context/CartContext";
+import { foods } from "@/sample/food";
+import { orders } from "@/sample/order";
+import { router } from "expo-router";
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import { Alert, FlatList, Text, View } from "react-native";
 
 type OrderListProps = {
   filter: "active" | "history";
 };
 
 export default function OrderList({ filter }: OrderListProps) {
+  const { addItem } = useCart();
+
   const filtered = orders.filter((o) =>
     filter === "active" ? o.status === "active" : o.status !== "active"
   );
+
+  const handleTrack = (id: string) => {
+    router.push({ pathname: "/order/track/[id]", params: { id } });
+  };
+
+  const handleViewDetails = (id: string) => {
+    router.push({ pathname: "/order/track/[id]", params: { id } });
+  };
+
+  const handleReorder = (id: string) => {
+    const order = orders.find((o) => o.id === id);
+    if (!order) return;
+    order.items.forEach((item) => {
+      const food = foods.find((f) => f.id === item.id);
+      if (food) {
+        addItem({
+          id: food.id,
+          name: food.name,
+          price: food.price,
+          image: food.image,
+          quantity: item.quantity,
+          restaurant: food.restaurant,
+        });
+      }
+    });
+    Alert.alert("Items Added", `${order.items.length} item(s) added to cart`, [
+      { text: "Continue", style: "cancel" },
+      { text: "View Cart", onPress: () => router.push("/(tabs)/cart") },
+    ]);
+  };
 
   if (filtered.length === 0) {
     return (
@@ -43,8 +78,9 @@ export default function OrderList({ filter }: OrderListProps) {
           estimatedTime={item.estimatedTime}
           rating={item.rating}
           items={item.items}
-          onTrack={(id) => console.log("Track", id)}
-          onReorder={(id) => console.log("Reorder", id)}
+          onPress={handleViewDetails}
+          onTrack={handleTrack}
+          onReorder={handleReorder}
         />
       )}
     />

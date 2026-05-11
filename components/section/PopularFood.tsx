@@ -1,11 +1,19 @@
+import AddedToCartModal from "@/components/item/AddedToCartModal";
 import { useCart } from "@/context/CartContext";
 import { foods } from "@/sample/food";
-import React from "react";
-import { Alert, FlatList, Text, View } from "react-native";
+import { router } from "expo-router";
+import React, { useState } from "react";
+import { FlatList, Text, View } from "react-native";
 import FoodCard from "../item/FoodItem";
 
 export default function PopularFoods() {
   const { addItem } = useCart();
+  const [modal, setModal] = useState<{ visible: boolean; name: string; image: any; price: number }>({
+    visible: false,
+    name: "",
+    image: null,
+    price: 0,
+  });
 
   const handleAddToCart = (foodId: string) => {
     const food = foods.find((f) => f.id === foodId);
@@ -18,7 +26,11 @@ export default function PopularFoods() {
       quantity: 1,
       restaurant: food.restaurant,
     });
-    Alert.alert("Added!", `${food.name} added to cart`);
+    setModal({ visible: true, name: food.name, image: food.image, price: food.price });
+  };
+
+  const handleFoodPress = (foodId: string) => {
+    router.push({ pathname: "/food/[id]", params: { id: foodId } });
   };
 
   return (
@@ -46,8 +58,21 @@ export default function PopularFoods() {
             freeDelivery={item.freeDelivery}
             discount={item.discount}
             onAddToCart={handleAddToCart}
+            onPress={handleFoodPress}
           />
         )}
+      />
+      <AddedToCartModal
+        visible={modal.visible}
+        itemName={modal.name}
+        itemImage={modal.image}
+        quantity={1}
+        price={modal.price}
+        onClose={() => setModal({ ...modal, visible: false })}
+        onViewCart={() => {
+          setModal({ ...modal, visible: false });
+          router.push("/(tabs)/cart");
+        }}
       />
     </View>
   );

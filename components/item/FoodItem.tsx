@@ -1,6 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 type FoodCardProps = {
   id: string;
@@ -13,6 +13,7 @@ type FoodCardProps = {
   freeDelivery?: boolean;
   discount?: number;
   onAddToCart?: (id: string) => void;
+  onPress?: (id: string) => void;
 };
 
 export default function FoodCard({
@@ -26,9 +27,10 @@ export default function FoodCard({
   freeDelivery,
   discount,
   onAddToCart,
+  onPress,
 }: FoodCardProps) {
   return (
-    <View className="bg-white rounded-3xl overflow-hidden w-[48%] shadow-sm mb-4">
+    <Pressable className="bg-white rounded-3xl overflow-hidden w-[48%] shadow-sm mb-4" onPress={() => onPress?.(id)}>
       <View className="relative">
         <Image source={image} className="w-full h-32" resizeMode="cover" />
         {discount ? (
@@ -36,20 +38,13 @@ export default function FoodCard({
             <Text className="text-white text-[10px] font-bold">{discount}% OFF</Text>
           </View>
         ) : null}
-        <TouchableOpacity
-          className="absolute top-2 right-2 bg-white/90 p-2 rounded-full"
-          onPress={() => onAddToCart?.(id)}
-        >
+        <TouchableOpacity className="absolute top-2 right-2 bg-white/90 p-2 rounded-full" onPress={() => onAddToCart?.(id)}>
           <Ionicons name="cart-outline" size={16} color="#000" />
         </TouchableOpacity>
       </View>
       <View className="p-3">
-        <Text numberOfLines={1} className="text-sm font-bold text-[#1E1E1E]">
-          {name}
-        </Text>
-        <Text numberOfLines={1} className="text-xs text-gray-500 mt-1">
-          {restaurant}
-        </Text>
+        <Text numberOfLines={1} className="text-sm font-bold text-[#1E1E1E]">{name}</Text>
+        <Text numberOfLines={1} className="text-xs text-gray-500 mt-1">{restaurant}</Text>
         <View className="flex-row items-center justify-between mt-3">
           <Text className="text-[#FF6B00] font-bold text-base">Rs {price}</Text>
           <View className="flex-row items-center">
@@ -67,6 +62,6 @@ export default function FoodCard({
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
