@@ -3,26 +3,20 @@ import CategorySection from "@/components/section/CategorySection";
 import HomeHeader from "@/components/section/HomeHeader";
 import HomeHero from "@/components/section/HomeHero";
 import PopularFoods from "@/components/section/PopularFood";
+import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  const [search, setSearch] = useState("");
+
   return (
     <SafeAreaView>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[1]} // 👈 SearchBar becomes sticky
-        contentContainerStyle={{ paddingBottom: 100 }}
-      >
-        {/* HEADER (scrolls away) */}
+      <ScrollView showsVerticalScrollIndicator={false} stickyHeaderIndices={[1]} contentContainerStyle={{ paddingBottom: 100 }}>
         <HomeHeader />
-
-        {/* SEARCH BAR (sticks on top) */}
         <View>
-          <SearchBar value={""} onFilterPress={() => console.log("filter")} />
+          <SearchBar value={search} onChangeText={setSearch} onFilterPress={() => console.log("filter")} />
         </View>
-
-        {/* CONTENT */}
         <HomeHero />
         <CategorySection />
         <PopularFoods />
