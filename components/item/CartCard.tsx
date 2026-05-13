@@ -13,15 +13,7 @@ type CartCardProps = {
   onRemove: (id: string) => void;
 };
 
-export default function CartCard({
-  id,
-  name,
-  price,
-  image,
-  quantity,
-  onUpdateQuantity,
-  onRemove,
-}: CartCardProps) {
+export default function CartCard({ id, name, price, image, quantity, onUpdateQuantity, onRemove }: CartCardProps) {
   return (
     <View style={styles.card}>
       <Image source={image} style={styles.image} />
@@ -54,54 +46,28 @@ export default function CartCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#F4F4F4",
-    borderRadius: 28,
-    padding: 14,
-    marginBottom: 18,
-    marginHorizontal: 20,
     flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: "#F4F4F4",
+    marginHorizontal: 20,
+    marginBottom: 12,
+    borderRadius: 28,
+    padding: 10,
     shadowColor: "#FFFFFF",
     shadowOffset: { width: -4, height: -4 },
     shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowRadius: 6,
     elevation: 4,
   },
-  image: {
-    width: 95,
-    height: 95,
-    borderRadius: 22,
-    resizeMode: "cover",
-  },
-  content: { flex: 1, marginLeft: 14, justifyContent: "space-between", height: 95 },
+  image: { width: 80, height: 80, borderRadius: 22, backgroundColor: "#E8E8E8" },
+  content: { flex: 1, marginLeft: 12, justifyContent: "center" },
   topRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
-  name: { fontSize: 18, fontWeight: "800", color: "#111", maxWidth: 160 },
-  size: { fontSize: 13, color: "#888", marginTop: 4, fontWeight: "500" },
-  deleteBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 14,
-    backgroundColor: "#FFF1E8",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  bottomRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-  price: { fontSize: 20, fontWeight: "800", color: "#FF6B00" },
-  qtyContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#ECECEC",
-    borderRadius: 18,
-    padding: 4,
-  },
-  qtyBtn: {
-    width: 34,
-    height: 34,
-    borderRadius: 12,
-    backgroundColor: "#F8F8F8",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  name: { fontSize: 16, fontWeight: "700", color: "#111" },
+  size: { fontSize: 12, color: "#999", marginTop: 2 },
+  deleteBtn: { width: 32, height: 32, borderRadius: 10, backgroundColor: "#fff", alignItems: "center", justifyContent: "center" },
+  bottomRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 14 },
+  price: { fontSize: 18, fontWeight: "800", color: "#FF6B00" },
+  qtyContainer: { flexDirection: "row", alignItems: "center", backgroundColor: "#fff", borderRadius: 16, padding: 3 },
+  qtyBtn: { width: 30, height: 30, borderRadius: 13, backgroundColor: "#F0F0F0", alignItems: "center", justifyContent: "center" },
   activeQtyBtn: { backgroundColor: "#FF6B00" },
-  qtyText: { marginHorizontal: 14, fontSize: 16, fontWeight: "700", color: "#111" },
+  qtyText: { marginHorizontal: 12, fontSize: 16, fontWeight: "700", color: "#111" },
 });

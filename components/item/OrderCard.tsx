@@ -22,24 +22,11 @@ const statusColors = {
   cancelled: { bg: "#FFEBEE", text: "#C62828", label: "Cancelled" },
 };
 
-export default function OrderCard({
-  id,
-  restaurant,
-  status,
-  total,
-  date,
-  estimatedTime,
-  rating,
-  items,
-  onPress,
-  onTrack,
-  onReorder,
-}: OrderCardProps) {
+export default function OrderCard({ id, restaurant, status, total, date, estimatedTime, rating, items, onPress, onTrack, onReorder }: OrderCardProps) {
   const sc = statusColors[status];
 
   return (
-    <Pressable className="bg-[#F4F4F4] rounded-3xl p-4 mb-4 mx-5" onPress={() => onPress?.(id)}>
-      {/* Header */}
+    <Pressable className="bg-[#F4F4F4] rounded-3xl p-4 mb-4 mx-5" onPress={() => onPress?.(id)}>n
       <View className="flex-row items-center justify-between mb-3">
         <View>
           <Text className="text-lg font-bold text-[#111]">{restaurant}</Text>
@@ -49,16 +36,9 @@ export default function OrderCard({
           <Text className="text-xs font-bold" style={{ color: sc.text }}>{sc.label}</Text>
         </View>
       </View>
-
-      {/* Items preview */}
       <View className="flex-row items-center mb-3">
         {items.slice(0, 3).map((item, i) => (
-          <Image
-            key={i}
-            source={item.image}
-            className="w-10 h-10 rounded-xl -ml-2 first:ml-0 border-2 border-[#F4F4F4]"
-            resizeMode="cover"
-          />
+          <Image key={i} source={item.image} className="w-10 h-10 rounded-xl -ml-2 first:ml-0 border-2 border-[#F4F4F4]" resizeMode="cover" />
         ))}
         {items.length > 3 && (
           <View className="w-10 h-10 rounded-xl -ml-2 bg-gray-300 items-center justify-center border-2 border-[#F4F4F4]">
@@ -70,8 +50,6 @@ export default function OrderCard({
           <Text className="text-base font-bold text-[#FF6B00]">Rs. {total}</Text>
         </View>
       </View>
-
-      {/* Progress bar for active orders */}
       {status === "active" && (
         <View className="mb-3">
           <View className="flex-row items-center gap-1 mb-1">
@@ -88,8 +66,6 @@ export default function OrderCard({
           </View>
         </View>
       )}
-
-      {/* Rating for delivered */}
       {status === "delivered" && rating && (
         <View className="flex-row items-center gap-1 mb-2">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -97,18 +73,13 @@ export default function OrderCard({
           ))}
         </View>
       )}
-
-      {/* Actions */}
       <View className="flex-row gap-3">
         {status === "active" ? (
           <TouchableOpacity className="flex-1 bg-[#FF6B00] py-3 rounded-xl items-center" onPress={() => onTrack?.(id)}>
             <Text className="text-white font-bold text-sm">Track Order</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            className={`flex-1 py-3 rounded-xl items-center ${status === "cancelled" ? "bg-gray-300" : "bg-[#FF6B00]"}`}
-            onPress={() => onReorder?.(id)}
-          >
+          <TouchableOpacity className={`flex-1 py-3 rounded-xl items-center ${status === "cancelled" ? "bg-gray-300" : "bg-[#FF6B00]"}`} onPress={() => onReorder?.(id)}>
             <Text className={`font-bold text-sm ${status === "cancelled" ? "text-gray-600" : "text-white"}`}>Reorder</Text>
           </TouchableOpacity>
         )}

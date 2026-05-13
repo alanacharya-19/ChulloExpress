@@ -7,7 +7,10 @@ type CartHeaderProps = {
   onClearCart: () => void;
 };
 
-export default function CartHeader({ itemCount, onClearCart }: CartHeaderProps) {
+export default function CartHeader({
+  itemCount,
+  onClearCart,
+}: CartHeaderProps) {
   const handleClear = () => {
     if (itemCount === 0) return;
     Alert.alert("Clear Cart", "Remove all items from your cart?", [
@@ -21,10 +24,16 @@ export default function CartHeader({ itemCount, onClearCart }: CartHeaderProps) 
       <View style={styles.spacer} />
       <View style={styles.titleContainer}>
         <Text style={styles.title}>My Cart</Text>
-        <Text style={styles.subtitle}>{itemCount} item{itemCount !== 1 ? "s" : ""} added</Text>
+        <Text style={styles.subtitle}>
+          {itemCount} item{itemCount !== 1 ? "s" : ""} added
+        </Text>
       </View>
       <TouchableOpacity style={styles.iconBtn} onPress={handleClear}>
-        <Ionicons name="trash-outline" size={20} color={itemCount > 0 ? "#FF6B00" : "#ccc"} />
+        <Ionicons
+          name="trash-outline"
+          size={20}
+          color={itemCount > 0 ? "#FF6B00" : "#ccc"}
+        />
       </TouchableOpacity>
     </View>
   );

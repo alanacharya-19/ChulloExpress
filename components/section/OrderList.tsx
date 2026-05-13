@@ -1,21 +1,33 @@
 import OrderCard from "@/components/item/OrderCard";
 import { useCart } from "@/context/CartContext";
-import { foods } from "@/sample/food";
-import { orders } from "@/sample/order";
+import { getFoods } from "@/services/foods";
+import { getOrders } from "@/services/orders";
 import { router } from "expo-router";
 import React from "react";
 import { Alert, FlatList, Text, View } from "react-native";
 
+type SortBy = "date" | "price-high-low" | "price-low-high";
+
 type OrderListProps = {
   filter: "active" | "history";
+  sortBy?: SortBy;
 };
 
-export default function OrderList({ filter }: OrderListProps) {
+export default function OrderList({ filter, sortBy }: OrderListProps) {
   const { addItem } = useCart();
 
-  const filtered = orders.filter((o) =>
+  const allOrders = getOrders();
+  let filtered = allOrders.filter((o) =>
     filter === "active" ? o.status === "active" : o.status !== "active"
   );
+
+  if (sortBy === "date") {
+    filtered = [...filtered].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } else if (sortBy === "price-high-low") {
+    filtered = [...filtered].sort((a, b) => b.total - a.total);
+  } else if (sortBy === "price-low-high") {
+    filtered = [...filtered].sort((a, b) => a.total - b.total);
+  }
 
   const handleTrack = (id: string) => {
     router.push({ pathname: "/order/track/[id]", params: { id } });
@@ -26,19 +38,12 @@ export default function OrderList({ filter }: OrderListProps) {
   };
 
   const handleReorder = (id: string) => {
-    const order = orders.find((o) => o.id === id);
+    const order = allOrders.find((o) => o.id === id);
     if (!order) return;
     order.items.forEach((item) => {
-      const food = foods.find((f) => f.id === item.id);
+      const food = getFoods().find((f) => f.id === item.id);
       if (food) {
-        addItem({
-          id: food.id,
-          name: food.name,
-          price: food.price,
-          image: food.image,
-          quantity: item.quantity,
-          restaurant: food.restaurant,
-        });
+        addItem({ id: food.id, name: food.name, price: food.price, image: food.image, quantity: item.quantity, restaurant: food.restaurant });
       }
     });
     Alert.alert("Items Added", `${order.items.length} item(s) added to cart`, [
@@ -54,35 +59,19 @@ export default function OrderList({ filter }: OrderListProps) {
           {filter === "active" ? "No active orders" : "No order history"}
         </Text>
         <Text className="text-sm text-gray-400 text-center">
-          {filter === "active"
-            ? "Place an order to see it here"
-            : "Delivered orders will appear here"}
+          {filter === "active" ? "Place an order to see it here" : "Delivered orders will appear here"}
         </Text>
       </View>
     );
   }
 
   return (
-    <FlatList
-      data={filtered}
-      keyExtractor={(item) => item.id}
-      showsVerticalScrollIndicator={false}
+    <FlatList data={filtered} keyExtractor={(item) => item.id} showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 120 }}
       renderItem={({ item }) => (
-        <OrderCard
-          id={item.id}
-          restaurant={item.restaurant}
-          status={item.status}
-          total={item.total}
-          date={item.date}
-          estimatedTime={item.estimatedTime}
-          rating={item.rating}
-          items={item.items}
-          onPress={handleViewDetails}
-          onTrack={handleTrack}
-          onReorder={handleReorder}
-        />
-      )}
-    />
+        <OrderCard id={item.id} restaurant={item.restaurant} status={item.status} total={item.total} date={item.date}
+          estimatedTime={item.estimatedTime} rating={item.rating} items={item.items}
+          onPress={handleViewDetails} onTrack={handleTrack} onReorder={handleReorder} />
+      )} />
   );
 }

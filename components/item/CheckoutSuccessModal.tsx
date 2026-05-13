@@ -1,20 +1,18 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useEffect, useRef } from "react";
-import { Animated, Dimensions, Image, Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Animated, Dimensions, Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   visible: boolean;
-  itemName: string;
-  itemImage: any;
-  quantity: number;
-  price: number;
+  total: number;
+  itemCount: number;
   onClose: () => void;
-  onViewCart: () => void;
+  onViewOrders: () => void;
 };
 
 const { height } = Dimensions.get("window");
 
-export default function AddedToCartModal({ visible, itemName, itemImage, quantity, price, onClose, onViewCart }: Props) {
+export default function CheckoutSuccessModal({ visible, total, itemCount, onClose, onViewOrders }: Props) {
   const slideAnim = useRef(new Animated.Value(height)).current;
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
@@ -39,21 +37,23 @@ export default function AddedToCartModal({ visible, itemName, itemImage, quantit
                 <Ionicons name="checkmark-circle" size={40} color="#22C55E" />
               </Animated.View>
             </View>
-            <Text className="text-center text-xl font-bold text-[#1E1E1E] mb-1">Added to Cart!</Text>
-            <Text className="text-center text-sm text-gray-500 mb-5">{quantity} x {itemName}</Text>
-            <View className="flex-row items-center bg-gray-50 rounded-2xl p-3 mb-5">
-              <Image source={itemImage} className="w-14 h-14 rounded-xl" resizeMode="cover" />
-              <View className="ml-3 flex-1">
-                <Text className="text-sm font-bold text-[#1E1E1E]" numberOfLines={1}>{itemName}</Text>
-                <Text className="text-xs text-gray-500 mt-0.5">Qty: {quantity}</Text>
+            <Text className="text-center text-xl font-bold text-[#1E1E1E] mb-1">Order Placed!</Text>
+            <Text className="text-center text-sm text-gray-500 mb-5">{itemCount} item{itemCount !== 1 ? "s" : ""} ordered</Text>
+            <View className="bg-gray-50 rounded-2xl p-4 mb-5">
+              <View className="flex-row justify-between mb-2">
+                <Text className="text-sm text-gray-500">Items</Text>
+                <Text className="text-sm font-semibold text-[#222]">{itemCount}</Text>
               </View>
-              <Text className="text-lg font-bold text-[#FF6B00]">Rs {price * quantity}</Text>
+              <View className="flex-row justify-between">
+                <Text className="text-sm text-gray-500">Total</Text>
+                <Text className="text-lg font-bold text-[#FF6B00]">Rs. {total}</Text>
+              </View>
             </View>
-            <TouchableOpacity className="bg-[#FF6B00] py-4 rounded-2xl items-center mb-3" onPress={onViewCart}>
-              <Text className="text-white font-bold text-base">View Cart</Text>
+            <TouchableOpacity className="bg-[#FF6B00] py-4 rounded-2xl items-center mb-3" onPress={onViewOrders}>
+              <Text className="text-white font-bold text-base">View Orders</Text>
             </TouchableOpacity>
             <TouchableOpacity className="py-3 items-center" onPress={onClose}>
-              <Text className="text-gray-500 font-semibold text-sm">Continue Browsing</Text>
+              <Text className="text-gray-500 font-semibold text-sm">Continue Shopping</Text>
             </TouchableOpacity>
           </Animated.View>
       </Pressable>

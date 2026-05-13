@@ -1,11 +1,11 @@
 import CartCard from "@/components/item/CartCard";
+import CheckoutSuccessModal from "@/components/item/CheckoutSuccessModal";
 import CartFooter from "@/components/section/CartFooter";
 import CartHeader from "@/components/section/CartHeader";
 import { useCart } from "@/context/CartContext";
 import { router } from "expo-router";
-import React, { useMemo } from "react";
-import { Alert, FlatList, Image, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useMemo, useState } from "react";
+import { FlatList, Image, Text, View } from "react-native";
 
 export default function CartScreen() {
   const {
@@ -18,6 +18,7 @@ export default function CartScreen() {
     getDeliveryFee,
     getDiscount,
   } = useCart();
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
   const subtotal = useMemo(() => getTotal(), [items]);
   const deliveryFee = useMemo(() => getDeliveryFee(), [items]);
@@ -28,24 +29,18 @@ export default function CartScreen() {
   );
   const itemCount = useMemo(() => getItemCount(), [items]);
 
+  const [checkoutData, setCheckoutData] = useState({ total: 0, itemCount: 0 });
+
   const handleCheckout = () => {
     if (itemCount === 0) return;
-    Alert.alert("Place Order", `Total: Rs. ${total}\nProceed to checkout?`, [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Order Now",
-        onPress: () => {
-          clearCart();
-          router.push("/(tabs)/order");
-        },
-      },
-    ]);
+    setCheckoutData({ total, itemCount });
+    clearCart();
+    setShowCheckoutModal(true);
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, marginTop: 20 }}>
       <CartHeader itemCount={itemCount} onClearCart={clearCart} />
-
       {itemCount === 0 ? (
         <View className="flex-1 items-center justify-center px-8">
           <Image
@@ -92,6 +87,16 @@ export default function CartScreen() {
           }
         />
       )}
-    </SafeAreaView>
+      <CheckoutSuccessModal
+        visible={showCheckoutModal}
+        total={checkoutData.total}
+        itemCount={checkoutData.itemCount}
+        onClose={() => setShowCheckoutModal(false)}
+        onViewOrders={() => {
+          setShowCheckoutModal(false);
+          router.push("/(tabs)/order");
+        }}
+      />
+    </View>
   );
 }

@@ -19,44 +19,22 @@ export default function HomeHero() {
       const nextIndex = (indexRef.current + 1) % images.length;
       indexRef.current = nextIndex;
       setIndex(nextIndex);
-
-      flatListRef.current?.scrollToIndex({
-        index: nextIndex,
-        animated: true,
-      });
+      flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        <FlatList
-          ref={flatListRef}
-          data={images}
-          keyExtractor={(_, i) => i.toString()}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          scrollEnabled={false}
-          getItemLayout={(_, i) => ({
-            length: width * 0.95,
-            offset: width * 0.95 * i,
-            index: i,
-          })}
-          renderItem={({ item }) => (
-            <Image source={item} style={styles.image} />
-          )}
-        />
+        <FlatList ref={flatListRef} data={images} keyExtractor={(_, i) => i.toString()} horizontal pagingEnabled
+          showsHorizontalScrollIndicator={false} scrollEnabled={false}
+          getItemLayout={(_, i) => ({ length: width * 0.95, offset: width * 0.95 * i, index: i })}
+          renderItem={({ item }) => <Image source={item} style={styles.image} />} />
       </View>
-
       <View style={styles.switchContainer}>
         {images.map((_, i) => (
-          <View
-            key={i}
-            style={[styles.switchDot, index === i && styles.activeSwitchDot]}
-          />
+          <View key={i} style={[styles.switchDot, index === i && styles.activeSwitchDot]} />
         ))}
       </View>
     </View>
@@ -64,54 +42,12 @@ export default function HomeHero() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    marginTop: 10,
-    alignItems: "center",
-  },
-
-  container: {
-    width: "95%",
-    height: 150,
-    borderRadius: 16,
-    overflow: "hidden",
-    backgroundColor: "#F5F5F5",
-
-    shadowColor: "#000",
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 5,
-
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.6)",
-  },
-
-  image: {
-    width: width * 0.95,
-    height: 150,
-    resizeMode: "cover",
-  },
-
-  switchContainer: {
-    flexDirection: "row",
-    marginTop: 8,
-    alignSelf: "center",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-
-  switchDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "rgba(0,0,0,0.2)",
-    marginHorizontal: 3,
-  },
-
-  activeSwitchDot: {
-    width: 14,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#FF6B00",
-  },
+  wrapper: { marginTop: 10, alignItems: "center" },
+  container: { width: "95%", height: 150, borderRadius: 16, overflow: "hidden", backgroundColor: "#F5F5F5",
+    shadowColor: "#000", shadowOffset: { width: 3, height: 3 }, shadowOpacity: 0.15, shadowRadius: 6, elevation: 5,
+    borderWidth: 1, borderColor: "rgba(255,255,255,0.6)" },
+  image: { width: width * 0.95, height: 150, resizeMode: "cover" },
+  switchContainer: { flexDirection: "row", marginTop: 8, alignSelf: "center", paddingHorizontal: 8, paddingVertical: 4 },
+  switchDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: "rgba(0,0,0,0.2)", marginHorizontal: 3 },
+  activeSwitchDot: { width: 14, height: 6, borderRadius: 3, backgroundColor: "#FF6B00" },
 });

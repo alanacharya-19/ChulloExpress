@@ -16,19 +16,7 @@ type FoodCardProps = {
   onPress?: (id: string) => void;
 };
 
-export default function FoodCard({
-  id,
-  image,
-  name,
-  restaurant,
-  price,
-  rating,
-  time,
-  freeDelivery,
-  discount,
-  onAddToCart,
-  onPress,
-}: FoodCardProps) {
+export default function FoodCard({ id, image, name, restaurant, price, rating, time, freeDelivery, discount, onAddToCart, onPress }: FoodCardProps) {
   return (
     <Pressable className="bg-white rounded-3xl overflow-hidden w-[48%] shadow-sm mb-4" onPress={() => onPress?.(id)}>
       <View className="relative">

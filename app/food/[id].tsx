@@ -1,26 +1,25 @@
 import AddedToCartModal from "@/components/item/AddedToCartModal";
 import FoodCard from "@/components/item/FoodItem";
 import { useCart } from "@/context/CartContext";
-import { foods } from "@/sample/food";
-import { restaurants } from "@/sample/restro";
+import { getFoodById, getFoods } from "@/services/foods";
+import { getRestaurantByName, getRestaurants } from "@/services/restaurants";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { addItem, items } = useCart();
   const [qty, setQty] = useState(1);
-  const [showModal, setShowModal] = useState(false);
+  const [showCartModal, setShowCartModal] = useState(false);
 
-  const food = foods.find((f) => f.id === id);
-  const restro = restaurants.find((r) => r.restroName === food?.restaurant);
+  const food = getFoodById(id);
+  const restro = food ? getRestaurantByName(food.restaurant) : undefined;
 
   if (!food) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+      <View className="flex-1 items-center justify-center ">
         <Text className="text-gray-400 text-lg">Food not found</Text>
         <TouchableOpacity
           className="mt-4 bg-[#FF6B00] px-6 py-3 rounded-full"
@@ -28,7 +27,7 @@ export default function FoodDetailScreen() {
         >
           <Text className="text-white font-bold">Go Back</Text>
         </TouchableOpacity>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -44,7 +43,7 @@ export default function FoodDetailScreen() {
       quantity: qty,
       restaurant: food.restaurant,
     });
-    setShowModal(true);
+    setShowCartModal(true);
   };
 
   const handleBuyNow = () => {
@@ -56,32 +55,33 @@ export default function FoodDetailScreen() {
       quantity: qty,
       restaurant: food.restaurant,
     });
-    setShowModal(true);
+    setQty(1);
+    router.push("/(tabs)/cart");
   };
 
-  const recommended = foods.filter(
+  const allFoods = getFoods();
+  const recommended = allFoods.filter(
     (f) => f.id !== food.id && f.restaurant === food.restaurant,
   );
-  const others = foods.filter(
+  const others = allFoods.filter(
     (f) => f.id !== food.id && f.restaurant !== food.restaurant,
   );
   const displayRecommended =
     recommended.length > 0 ? recommended : others.slice(0, 4);
 
   return (
-    <View>
+    <View className="flex-1">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
       >
-        {/* Image header */}
         <View className="relative">
           <Image
             source={food.image}
             className="w-full h-72"
             resizeMode="cover"
           />
-          <View className="absolute inset-x-0 top-10 flex-row justify-between px-4 pt-2">
+          <View className="absolute inset-x-0 top-10 flex-row justify-between px-4 pt-2 ">
             <TouchableOpacity
               className="w-10 h-10 bg-white/90 rounded-full items-center justify-center"
               onPress={() => router.back()}
@@ -113,9 +113,7 @@ export default function FoodDetailScreen() {
           )}
         </View>
 
-        {/* Food info */}
         <View className="px-5 pt-5">
-          {/* Veg/Non-veg badge + name */}
           <View className="flex-row items-center gap-3 mb-2">
             <View
               className={`w-6 h-6 rounded-full items-center justify-center ${food.veg ? "bg-green-100" : "bg-red-100"}`}
@@ -128,10 +126,10 @@ export default function FoodDetailScreen() {
               {food.name}
             </Text>
           </View>
-
-          {/* Restaurant + location */}
-          <View className="flex-row items-center gap-2 mb-3">
-            <Ionicons name="storefront-outline" size={16} color="#666" />
+          <TouchableOpacity className="flex-row items-center gap-2 mb-3" onPress={() => restro && router.push({ pathname: "/restro/[id]", params: { id: restro.id } })}>
+            {restro && (
+              <Image source={restro.restroImage} className="w-7 h-7 rounded-full" resizeMode="cover" />
+            )}
             <Text className="text-sm text-gray-600 font-medium">
               {food.restaurant}
             </Text>
@@ -144,9 +142,8 @@ export default function FoodDetailScreen() {
                 </Text>
               </>
             )}
-          </View>
-
-          {/* Rating + time */}
+            <Ionicons name="chevron-forward" size={14} color="#D1D5DB" />
+          </TouchableOpacity>
           <View className="flex-row items-center gap-4 mb-4">
             <View className="flex-row items-center gap-1 bg-green-50 px-2 py-1 rounded-lg">
               <Ionicons name="star" size={14} color="#22C55E" />
@@ -166,8 +163,6 @@ export default function FoodDetailScreen() {
               </View>
             )}
           </View>
-
-          {/* Price */}
           <View className="flex-row items-baseline gap-2 mb-4">
             <Text className="text-3xl font-bold text-[#FF6B00]">
               Rs {food.price}
@@ -178,14 +173,11 @@ export default function FoodDetailScreen() {
               </Text>
             )}
           </View>
-
-          {/* Description */}
           <Text className="text-sm text-gray-600 leading-6 mb-6">
             {food.description}
           </Text>
         </View>
 
-        {/* Quantity selector + Buttons */}
         <View className="px-5 mb-6">
           <Text className="text-base font-bold text-[#1E1E1E] mb-3">
             Quantity
@@ -207,7 +199,6 @@ export default function FoodDetailScreen() {
               <Ionicons name="add" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
-
           <View className="flex-row gap-3">
             <TouchableOpacity
               className="flex-1 bg-[#FFF1E8] py-4 rounded-2xl items-center"
@@ -228,7 +219,6 @@ export default function FoodDetailScreen() {
           </View>
         </View>
 
-        {/* Recommended */}
         <View className="px-5 pt-2 border-t border-gray-100">
           <Text className="text-lg font-bold text-[#1E1E1E] mb-4">
             Recommended
@@ -259,17 +249,17 @@ export default function FoodDetailScreen() {
       </ScrollView>
 
       <AddedToCartModal
-        visible={showModal}
+        visible={showCartModal}
         itemName={food.name}
         itemImage={food.image}
         quantity={qty}
         price={food.price}
         onClose={() => {
-          setShowModal(false);
+          setShowCartModal(false);
           setQty(1);
         }}
         onViewCart={() => {
-          setShowModal(false);
+          setShowCartModal(false);
           setQty(1);
           router.push("/(tabs)/cart");
         }}
