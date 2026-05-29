@@ -44,7 +44,7 @@ export default function SettingsScreen() {
             <Text className="text-sm font-semibold text-[#333]">Edit Profile</Text>
             <Ionicons name="chevron-forward" size={18} color="#D1D5DB" className="ml-auto" />
           </TouchableOpacity>
-          <TouchableOpacity className="flex-row items-center gap-3 bg-[#F4F4F4] rounded-3xl px-5 py-4" onPress={() => router.push("/address")}>
+          <TouchableOpacity className="flex-row items-center gap-3 bg-[#F4F4F4] rounded-3xl px-5 py-4" onPress={() => router.push("/address" as any)}>
             <Ionicons name="location-outline" size={20} color="#FF6B00" />
             <Text className="text-sm font-semibold text-[#333]">Manage Addresses</Text>
             <Ionicons name="chevron-forward" size={18} color="#D1D5DB" className="ml-auto" />

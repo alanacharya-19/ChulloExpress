@@ -63,6 +63,17 @@ export default function OrderTrackScreen() {
   const cfg = statusConfig[order.status];
   const hasReviewed = userRating > 0;
 
+  const handleCancelOrder = () => {
+    Alert.alert(
+      "Cancel Order",
+      "Are you sure you want to cancel this order?",
+      [
+        { text: "Keep Order", style: "cancel" },
+        { text: "Cancel Order", style: "destructive", onPress: () => Alert.alert("Cancelled", "Your order has been cancelled.") },
+      ]
+    );
+  };
+
   const handleReorder = () => {
     order.items.forEach((item) => {
       const food = getFoods().find((f) => f.id === item.id);
@@ -179,6 +190,12 @@ export default function OrderTrackScreen() {
                 </View>
               ))}
             </View>
+          )}
+
+          {order.status === "active" && (
+            <TouchableOpacity className="bg-white border border-red-300 py-3 rounded-xl items-center mt-4" onPress={handleCancelOrder}>
+              <Text className="text-red-600 font-bold text-sm">Cancel Order</Text>
+            </TouchableOpacity>
           )}
 
           {order.status === "delivered" && (
