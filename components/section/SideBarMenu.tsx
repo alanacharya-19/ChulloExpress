@@ -26,18 +26,18 @@ const menuItems = [
   {
     icon: "location-outline",
     label: "Delivery Address",
-    route: "/(tabs)/index",
+    route: "/address",
   },
-  { icon: "settings-outline", label: "Settings", route: "/(tabs)/index" },
+  { icon: "settings-outline", label: "Settings", route: "/settings" },
   {
     icon: "information-circle-outline",
     label: "About",
-    route: "/(tabs)/index",
+    route: "/about",
   },
   {
     icon: "log-out-outline",
     label: "Logout",
-    route: "/(tabs)/index",
+    route: "/profile",
     danger: true,
   },
 ];

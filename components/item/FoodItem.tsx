@@ -1,6 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { useFavorites } from "@/context/FavoritesContext";
 
 type FoodCardProps = {
   id: string;
@@ -17,6 +18,9 @@ type FoodCardProps = {
 };
 
 export default function FoodCard({ id, image, name, restaurant, price, rating, time, freeDelivery, discount, onAddToCart, onPress }: FoodCardProps) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const liked = isFavorite(id);
+
   return (
     <Pressable className="bg-white rounded-3xl overflow-hidden w-[48%] shadow-sm mb-4" onPress={() => onPress?.(id)}>
       <View className="relative">
@@ -26,6 +30,9 @@ export default function FoodCard({ id, image, name, restaurant, price, rating, t
             <Text className="text-white text-[10px] font-bold">{discount}% OFF</Text>
           </View>
         ) : null}
+        <TouchableOpacity className="absolute top-2 left-10 bg-white/90 p-2 rounded-full" onPress={() => toggleFavorite(id)}>
+          <Ionicons name={liked ? "heart" : "heart-outline"} size={16} color={liked ? "#C62828" : "#000"} />
+        </TouchableOpacity>
         <TouchableOpacity className="absolute top-2 right-2 bg-white/90 p-2 rounded-full" onPress={() => onAddToCart?.(id)}>
           <Ionicons name="cart-outline" size={16} color="#000" />
         </TouchableOpacity>

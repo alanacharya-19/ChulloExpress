@@ -1,5 +1,6 @@
 import AddedToCartModal from "@/components/item/AddedToCartModal";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import { getFoods } from "@/services/foods";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ type Props = {
 
 export default function FoodSection({ initialCategory }: Props) {
   const { addItem } = useCart();
+  const { favorites } = useFavorites();
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory) ? initialCategory : "All"
   );
@@ -36,7 +38,7 @@ export default function FoodSection({ initialCategory }: Props) {
     : selectedCategory === "Street Food"
       ? foodItems.filter((f) => streetFoodCategories.includes(f.category))
       : selectedCategory === "Favourites"
-        ? [...foodItems].sort((a, b) => b.rating - a.rating)
+        ? foodItems.filter((f) => favorites.has(f.id))
         : selectedCategory === "Cake"
           ? foodItems.filter((f) => f.category === "Cake")
           : foodItems.filter((f) => f.category === selectedCategory);
