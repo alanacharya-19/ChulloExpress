@@ -169,7 +169,7 @@ export default function FoodDetailScreen() {
             </Text>
             {food.discount > 0 && (
               <Text className="text-base text-gray-400 line-through">
-                Rs {Math.round(food.price * (1 + food.discount / 100))}
+                Rs {Math.round(food.price / (1 - food.discount / 100))}
               </Text>
             )}
           </View>

@@ -9,7 +9,8 @@ import FoodCard from "../item/FoodItem";
 const streetFoodCategories = ["Burgers", "Pizza", "Momos", "Sides", "Sandwich"];
 const foodItems = getFoods();
 const allCategories = ["All", ...new Set(foodItems.map((f) => f.category))];
-const categories = [...allCategories, "Street Food", "Favourites", "Cake"];
+const extraCategories = ["Street Food", "Favourites", "Cake"];
+const categories = [...new Set([...allCategories, ...extraCategories])];
 
 type Props = {
   initialCategory?: string;

@@ -26,7 +26,7 @@ export default function OrderCard({ id, restaurant, status, total, date, estimat
   const sc = statusColors[status];
 
   return (
-    <Pressable className="bg-[#F4F4F4] rounded-3xl p-4 mb-4 mx-5" onPress={() => onPress?.(id)}>n
+    <Pressable className="bg-[#F4F4F4] rounded-3xl p-4 mb-4 mx-5" onPress={() => onPress?.(id)}>
       <View className="flex-row items-center justify-between mb-3">
         <View>
           <Text className="text-lg font-bold text-[#111]">{restaurant}</Text>
