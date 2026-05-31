@@ -23,12 +23,15 @@ const SIDEBAR_WIDTH = width * 0.75;
 const menuItems = [
   { icon: "person-outline", label: "Profile", route: "/profile" },
   { icon: "bag-outline", label: "My Orders", route: "/(tabs)/order" },
+  { icon: "heart-outline", label: "Favorites", route: "/favorites" },
+  { icon: "notifications-outline", label: "Notifications", route: "/notifications" },
   {
     icon: "location-outline",
     label: "Delivery Address",
     route: "/address",
   },
   { icon: "settings-outline", label: "Settings", route: "/settings" },
+  { icon: "help-circle-outline", label: "Help & Support", route: "/help" },
   {
     icon: "information-circle-outline",
     label: "About",
