@@ -25,6 +25,7 @@ const menuItems = [
   { icon: "bag-outline", label: "My Orders", route: "/(tabs)/order" },
   { icon: "heart-outline", label: "Favorites", route: "/favorites" },
   { icon: "notifications-outline", label: "Notifications", route: "/notifications" },
+  { icon: "pricetag-outline", label: "Offers", route: "/promotions" },
   {
     icon: "location-outline",
     label: "Delivery Address",
@@ -32,6 +33,7 @@ const menuItems = [
   },
   { icon: "settings-outline", label: "Settings", route: "/settings" },
   { icon: "help-circle-outline", label: "Help & Support", route: "/help" },
+  { icon: "language-outline", label: "Language", route: "/language" },
   {
     icon: "information-circle-outline",
     label: "About",
