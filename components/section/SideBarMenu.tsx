@@ -8,6 +8,7 @@ import {
   Image,
   Modal,
   Pressable,
+  Share,
   Text,
   TouchableOpacity,
   View,
@@ -35,6 +36,7 @@ const menuItems = [
   { icon: "settings-outline", label: "Settings", route: "/settings" },
   { icon: "help-circle-outline", label: "Help & Support", route: "/help" },
   { icon: "language-outline", label: "Language", route: "/language" },
+  { icon: "share-outline", label: "Share App", route: "", share: true },
   {
     icon: "information-circle-outline",
     label: "About",
@@ -60,8 +62,12 @@ export default function SideBarMenu({ visible, onClose }: Props) {
     }).start();
   }, [visible]);
 
-  const handleNavigate = (route: string, danger?: boolean) => {
+  const handleNavigate = (route: string, danger?: boolean, share?: boolean) => {
     onClose();
+    if (share) {
+      Share.share({ message: "ChulloExpress - Fast food delivery at your doorstep! Download now: https://chulloexpress.com" });
+      return;
+    }
     if (danger) {
       Alert.alert("Logout", "Are you sure you want to log out?", [
         { text: "Cancel", style: "cancel" },
@@ -100,7 +106,7 @@ export default function SideBarMenu({ visible, onClose }: Props) {
             <TouchableOpacity
               key={i}
               className="flex-row items-center py-4 border-b border-gray-50"
-              onPress={() => handleNavigate(item.route, item.danger)}
+              onPress={() => handleNavigate(item.route, item.danger, (item as any).share)}
             >
               <Ionicons
                 name={item.icon as any}

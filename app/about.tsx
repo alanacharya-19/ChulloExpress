@@ -1,9 +1,12 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Share, Text, TouchableOpacity, View } from "react-native";
 
 export default function AboutScreen() {
+  const handleShare = async () => {
+    await Share.share({ message: "ChulloExpress - Fast food delivery at your doorstep! Download now: https://chulloexpress.com" });
+  };
   const info = [
     { label: "Version", value: "1.0.0" },
     { label: "Platform", value: "iOS & Android" },
@@ -33,7 +36,11 @@ export default function AboutScreen() {
             </View>
           ))}
         </View>
-        <View className="items-center mt-8">
+        <TouchableOpacity className="mx-5 bg-[#FF6B00] py-4 rounded-2xl items-center flex-row justify-center gap-2 mt-6" onPress={handleShare}>
+          <Ionicons name="share-outline" size={20} color="#fff" />
+          <Text className="text-white font-bold text-base">Share App</Text>
+        </TouchableOpacity>
+        <View className="items-center mt-6">
           <Text className="text-xs text-gray-400">Made with love in Nepal</Text>
         </View>
       </ScrollView>

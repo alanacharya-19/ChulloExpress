@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useRef } from "react";
+import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
 
 type CartCardProps = {
   id: string;
@@ -14,8 +15,26 @@ type CartCardProps = {
 };
 
 export default function CartCard({ id, name, price, image, quantity, onUpdateQuantity, onRemove }: CartCardProps) {
+  const swipeRef = useRef<Swipeable>(null);
+
+  const renderRightActions = (_progress: Animated.AnimatedInterpolation<number>, dragX: Animated.AnimatedInterpolation<number>) => {
+    const scale = dragX.interpolate({ inputRange: [-80, 0], outputRange: [1, 0.5], extrapolate: "clamp" });
+    return (
+      <TouchableOpacity
+        className="items-center justify-center bg-red-500 rounded-[28px] w-20 h-full mr-5"
+        onPress={() => { swipeRef.current?.close(); onRemove(id); }}
+      >
+        <Animated.View style={{ transform: [{ scale }] }} className="items-center">
+          <Ionicons name="trash-outline" size={24} color="#fff" />
+          <Text className="text-white text-xs font-bold mt-1">Delete</Text>
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <View style={styles.card}>
+    <Swipeable ref={swipeRef} overshootRight={false} friction={2} renderRightActions={renderRightActions}>
+      <View style={styles.card}>
       <Image source={image} style={styles.image} />
       <View style={styles.content}>
         <View style={styles.topRow}>
@@ -41,6 +60,7 @@ export default function CartCard({ id, name, price, image, quantity, onUpdateQua
         </View>
       </View>
     </View>
+    </Swipeable>
   );
 }
 

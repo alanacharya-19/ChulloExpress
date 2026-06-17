@@ -10,11 +10,21 @@ import { FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from "r
 export default function SearchScreen() {
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
+  const [recent, setRecent] = useState<string[]>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebounced(query), 200);
     return () => clearTimeout(timer);
   }, [query]);
+
+  useEffect(() => {
+    if (debounced.trim()) {
+      setRecent((prev) => {
+        const next = [debounced.trim(), ...prev.filter((r) => r !== debounced.trim())];
+        return next.slice(0, 5);
+      });
+    }
+  }, [debounced]);
 
   const q = debounced.trim().toLowerCase();
 
@@ -60,10 +70,32 @@ export default function SearchScreen() {
       </View>
 
       {debounced.trim() === "" ? (
-        <View className="flex-1 items-center justify-center px-8">
-          <Ionicons name="search-outline" size={64} color="#D1D5DB" />
-          <Text className="text-gray-400 text-lg mt-4 font-medium">Search for your favorite food</Text>
-          <Text className="text-gray-400 text-sm mt-1">Find dishes and restaurants you love</Text>
+        <View className="flex-1 px-5">
+          {recent.length > 0 ? (
+            <View>
+              <View className="flex-row items-center justify-between mb-3">
+                <Text className="text-base font-bold text-[#1E1E1E]">Recent Searches</Text>
+                <TouchableOpacity onPress={() => setRecent([])}>
+                  <Text className="text-xs font-bold text-[#FF6B00]">Clear All</Text>
+                </TouchableOpacity>
+              </View>
+              {recent.map((term, i) => (
+                <TouchableOpacity key={i} className="flex-row items-center py-3 border-b border-gray-50" onPress={() => { setQuery(term); setDebounced(term); }}>
+                  <Ionicons name="time-outline" size={18} color="#D1D5DB" />
+                  <Text className="flex-1 ml-3 text-sm text-gray-600">{term}</Text>
+                  <TouchableOpacity onPress={() => setRecent((prev) => prev.filter((_, j) => j !== i))}>
+                    <Ionicons name="close-outline" size={18} color="#D1D5DB" />
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            <View className="flex-1 items-center justify-center">
+              <Ionicons name="search-outline" size={64} color="#D1D5DB" />
+              <Text className="text-gray-400 text-lg mt-4 font-medium">Search for your favorite food</Text>
+              <Text className="text-gray-400 text-sm mt-1">Find dishes and restaurants you love</Text>
+            </View>
+          )}
         </View>
       ) : !hasAnyResults ? (
         <View className="flex-1 items-center justify-center px-8">
