@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useUser } from "@/context/UserContext";
 
 type Props = {
   visible: boolean;
@@ -51,6 +52,7 @@ const menuItems = [
 ];
 
 export default function SideBarMenu({ visible, onClose }: Props) {
+  const { name } = useUser();
   const slideAnim = useRef(new Animated.Value(width)).current;
 
   useEffect(() => {
@@ -99,7 +101,7 @@ export default function SideBarMenu({ visible, onClose }: Props) {
             <Text className="text-lg font-bold text-[#1E1E1E]">
               ChulloExpress
             </Text>
-            <Text className="text-xs text-gray-500 mt-1">Alan Shrestha</Text>
+            <Text className="text-xs text-gray-500 mt-1">{name}</Text>
           </View>
 
           {menuItems.map((item, i) => (

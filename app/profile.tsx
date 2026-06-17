@@ -9,14 +9,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useUser } from "@/context/UserContext";
 
 export default function ProfileScreen() {
-  const [name, setName] = useState("Alan Shrestha");
-  const [email, setEmail] = useState("alan@example.com");
-  const [phone, setPhone] = useState("+977-9841234567");
-  const [address, setAddress] = useState("Bangesimal-1, Surkhet, Nepal");
+  const { name: savedName, email: savedEmail, phone: savedPhone, address: savedAddress, updateUser } = useUser();
+  const [name, setName] = useState(savedName);
+  const [email, setEmail] = useState(savedEmail);
+  const [phone, setPhone] = useState(savedPhone);
+  const [address, setAddress] = useState(savedAddress);
 
   const handleSave = () => {
+    updateUser({ name, email, phone, address });
     Alert.alert("Profile Updated", "Your profile has been saved successfully.");
   };
 

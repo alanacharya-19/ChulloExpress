@@ -3,6 +3,7 @@ import CheckoutSuccessModal from "@/components/item/CheckoutSuccessModal";
 import CartFooter from "@/components/section/CartFooter";
 import CartHeader from "@/components/section/CartHeader";
 import { useCart } from "@/context/CartContext";
+import { addOrder } from "@/services/orders";
 import { router } from "expo-router";
 import React, { useMemo, useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
@@ -29,11 +30,14 @@ export default function CartScreen() {
   );
   const itemCount = useMemo(() => getItemCount(), [items]);
 
-  const [checkoutData, setCheckoutData] = useState({ total: 0, itemCount: 0 });
+  const [checkoutData, setCheckoutData] = useState({ total: 0, itemCount: 0, orderId: "" });
 
   const handleCheckout = () => {
     if (itemCount === 0) return;
-    setCheckoutData({ total, itemCount });
+    const restaurant = items[0]?.restaurant || "Multiple";
+    const orderItems = items.map((i) => ({ id: i.id, name: i.name, quantity: i.quantity, price: i.price, image: i.image }));
+    const order = addOrder({ items: orderItems, status: "active", total, deliveryFee, discount, estimatedTime: "25-35 min", restaurant });
+    setCheckoutData({ total, itemCount, orderId: order.id });
     clearCart();
     setShowCheckoutModal(true);
   };
