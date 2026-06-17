@@ -47,7 +47,7 @@ export default function ProfileScreen() {
               {name.charAt(0)}
             </Text>
           </View>
-          <TouchableOpacity className="bg-[#FF6B00] px-4 py-1.5 rounded-full">
+          <TouchableOpacity className="bg-[#FF6B00] px-4 py-1.5 rounded-full" onPress={() => Alert.alert("Change Photo", "Image picker coming soon.")}>
             <Text className="text-white text-xs font-bold">Change Photo</Text>
           </TouchableOpacity>
         </View>

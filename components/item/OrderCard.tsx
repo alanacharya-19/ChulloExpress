@@ -22,8 +22,15 @@ const statusColors = {
   cancelled: { bg: "#FFEBEE", text: "#C62828", label: "Cancelled" },
 };
 
+const progressWidths: Record<string, string> = {
+  active: "w-2/5",
+  delivered: "w-full",
+  cancelled: "w-1/2",
+};
+
 export default function OrderCard({ id, restaurant, status, total, date, estimatedTime, rating, items, onPress, onTrack, onReorder }: OrderCardProps) {
   const sc = statusColors[status];
+  const progressClass = progressWidths[status] || "w-0";
 
   return (
     <Pressable className="bg-[#F4F4F4] rounded-3xl p-4 mb-4 mx-5" onPress={() => onPress?.(id)}>
@@ -57,7 +64,7 @@ export default function OrderCard({ id, restaurant, status, total, date, estimat
             <Text className="text-xs text-gray-600">Estimated {estimatedTime}</Text>
           </View>
           <View className="h-1.5 bg-gray-300 rounded-full overflow-hidden">
-            <View className="w-2/3 h-full bg-[#22C55E] rounded-full" />
+            <View className={`h-full bg-[#22C55E] rounded-full ${progressClass}`} />
           </View>
           <View className="flex-row justify-between mt-1">
             <Text className="text-[10px] text-gray-500">Ordered</Text>

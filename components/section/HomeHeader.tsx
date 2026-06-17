@@ -2,6 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { useNotifications } from "@/context/NotificationContext";
 import { useUser } from "@/context/UserContext";
 import IconButton from "../item/IconButton";
 
@@ -13,6 +14,7 @@ type Props = {
 
 export default function HomeHeader({ onMenuPress, onNotificationPress, onSearchPress }: Props) {
   const { name, address } = useUser();
+  const { unreadCount } = useNotifications();
   return (
     <View className="mx-4 flex-row items-center justify-between">
       <TouchableOpacity onPress={() => router.push("/profile")}>
@@ -26,7 +28,7 @@ export default function HomeHeader({ onMenuPress, onNotificationPress, onSearchP
         </TouchableOpacity>
       <View className="flex-row items-center gap-3">
         <IconButton iconName="search-outline" onPress={onSearchPress || (() => router.push("/search"))} iconSize={22} color="#000" />
-        <IconButton iconName="notifications-outline" onPress={onNotificationPress} iconSize={22} badgeCount={3} color="#000" />
+        <IconButton iconName="notifications-outline" onPress={onNotificationPress} iconSize={22} badgeCount={unreadCount} color="#000" />
         <IconButton iconName="menu" onPress={onMenuPress} iconSize={22} color="#000" />
       </View>
     </View>

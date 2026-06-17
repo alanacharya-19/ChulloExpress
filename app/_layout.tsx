@@ -1,5 +1,6 @@
 import { CartProvider } from "@/context/CartContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
+import { NotificationProvider } from "@/context/NotificationContext";
 import { UserProvider } from "@/context/UserContext";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,11 +10,13 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <UserProvider>
-        <CartProvider>
-          <FavoritesProvider>
-            <Stack screenOptions={{ headerShown: false }} />
-          </FavoritesProvider>
-        </CartProvider>
+        <NotificationProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <Stack screenOptions={{ headerShown: false }} />
+            </FavoritesProvider>
+          </CartProvider>
+        </NotificationProvider>
       </UserProvider>
     </GestureHandlerRootView>
   );

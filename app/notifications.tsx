@@ -1,37 +1,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNotifications } from "@/context/NotificationContext";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
-type Notification = {
-  id: string;
-  icon: string;
-  color: string;
-  title: string;
-  desc: string;
-  time: string;
-  read: boolean;
-};
-
-const initialNotifications: Notification[] = [
-  { id: "1", icon: "checkmark-circle", color: "#22C55E", title: "Order Delivered", desc: "Your order from Burger House has been delivered.", time: "2 min ago", read: false },
-  { id: "2", icon: "time-outline", color: "#FF6B00", title: "Order Preparing", desc: "Your Pizza Hub order is being prepared.", time: "15 min ago", read: false },
-  { id: "3", icon: "pricetag-outline", color: "#3B82F6", title: "50% OFF Deal", desc: "Get 50% off on all Momos at Momo King today!", time: "1 hour ago", read: false },
-  { id: "4", icon: "star-outline", color: "#FACC15", title: "Rate Your Meal", desc: "How was your food from Royal Kitchen? Rate now.", time: "2 hours ago", read: true },
-  { id: "5", icon: "location-outline", color: "#8B5CF6", title: "New Restaurant Nearby", desc: "BBQ Nation just opened near your location.", time: "1 day ago", read: true },
-];
-
 export default function NotificationsScreen() {
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
-  const handleMarkRead = (id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
-  };
-
-  const handleMarkAllRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
+  const { notifications, unreadCount, markRead, markAllRead } = useNotifications();
 
   return (
     <View className="flex-1 mt-10 bg-white">
@@ -48,7 +22,7 @@ export default function NotificationsScreen() {
           )}
         </View>
         {unreadCount > 0 && (
-          <TouchableOpacity onPress={handleMarkAllRead}>
+          <TouchableOpacity onPress={markAllRead}>
             <Text className="text-xs font-bold text-[#FF6B00]">Mark All Read</Text>
           </TouchableOpacity>
         )}
@@ -66,7 +40,7 @@ export default function NotificationsScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity
             className={`flex-row items-start py-4 border-b border-gray-50 ${!item.read ? "bg-orange-50/50 -mx-5 px-5 rounded-2xl" : ""}`}
-            onPress={() => handleMarkRead(item.id)}
+            onPress={() => markRead(item.id)}
           >
             <View className="w-10 h-10 rounded-full items-center justify-center" style={{ backgroundColor: item.color + "20" }}>
               <Ionicons name={item.icon as any} size={20} color={item.color} />
