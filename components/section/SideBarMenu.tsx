@@ -2,6 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import {
+  Alert,
   Animated,
   Dimensions,
   Image,
@@ -59,8 +60,15 @@ export default function SideBarMenu({ visible, onClose }: Props) {
     }).start();
   }, [visible]);
 
-  const handleNavigate = (route: string) => {
+  const handleNavigate = (route: string, danger?: boolean) => {
     onClose();
+    if (danger) {
+      Alert.alert("Logout", "Are you sure you want to log out?", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Logout", style: "destructive", onPress: () => router.push("/profile") },
+      ]);
+      return;
+    }
     router.push(route as any);
   };
 
@@ -92,7 +100,7 @@ export default function SideBarMenu({ visible, onClose }: Props) {
             <TouchableOpacity
               key={i}
               className="flex-row items-center py-4 border-b border-gray-50"
-              onPress={() => handleNavigate(item.route)}
+              onPress={() => handleNavigate(item.route, item.danger)}
             >
               <Ionicons
                 name={item.icon as any}

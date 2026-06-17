@@ -39,12 +39,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           items: state.items.map((i) =>
             i.id === action.payload.id
-              ? { ...i, quantity: i.quantity + 1 }
+              ? { ...i, quantity: Math.min(99, i.quantity + 1) }
               : i
           ),
         };
       }
-      return { items: [...state.items, { ...action.payload, quantity: 1 }] };
+      return { items: [...state.items, { ...action.payload, quantity: Math.min(99, action.payload.quantity) }] };
     }
     case "REMOVE_ITEM":
       return { items: state.items.filter((i) => i.id !== action.payload) };
@@ -52,7 +52,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return {
         items: state.items.map((i) =>
           i.id === action.payload.id
-            ? { ...i, quantity: Math.max(1, action.payload.quantity) }
+            ? { ...i, quantity: Math.min(99, Math.max(1, action.payload.quantity)) }
             : i
         ),
       };

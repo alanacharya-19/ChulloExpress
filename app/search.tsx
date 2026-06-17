@@ -4,13 +4,19 @@ import { getFoods } from "@/services/foods";
 import { getRestaurants } from "@/services/restaurants";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function SearchScreen() {
   const [query, setQuery] = useState("");
+  const [debounced, setDebounced] = useState("");
 
-  const q = query.trim().toLowerCase();
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(query), 200);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const q = debounced.trim().toLowerCase();
 
   const allRestaurants = getRestaurants();
   const allFoods = getFoods();
@@ -46,14 +52,14 @@ export default function SearchScreen() {
             autoFocus
           />
           {query.length > 0 && (
-            <TouchableOpacity onPress={() => setQuery("")}>
+            <TouchableOpacity onPress={() => { setQuery(""); setDebounced(""); }}>
               <Ionicons name="close-circle" size={20} color="#999" />
             </TouchableOpacity>
           )}
         </View>
       </View>
 
-      {query.trim() === "" ? (
+      {debounced.trim() === "" ? (
         <View className="flex-1 items-center justify-center px-8">
           <Ionicons name="search-outline" size={64} color="#D1D5DB" />
           <Text className="text-gray-400 text-lg mt-4 font-medium">Search for your favorite food</Text>

@@ -194,7 +194,7 @@ export default function FoodDetailScreen() {
             </Text>
             <TouchableOpacity
               className="w-10 h-10 bg-[#FF6B00] rounded-full items-center justify-center"
-              onPress={() => setQty(qty + 1)}
+              onPress={() => setQty(Math.min(99, qty + 1))}
             >
               <Ionicons name="add" size={20} color="#fff" />
             </TouchableOpacity>

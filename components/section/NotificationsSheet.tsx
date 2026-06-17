@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { Animated, Dimensions, Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 
@@ -43,7 +44,7 @@ export default function NotificationsSheet({ visible, onClose }: Props) {
             </TouchableOpacity>
           </View>
 
-          <View className="px-4 pb-8">
+          <View className="px-4 pb-4">
             {notifications.map((notif) => (
               <TouchableOpacity key={notif.id} className="flex-row items-start py-4 border-b border-gray-50">
                 <View className="w-10 h-10 rounded-full items-center justify-center" style={{ backgroundColor: notif.color + "20" }}>
@@ -56,6 +57,12 @@ export default function NotificationsSheet({ visible, onClose }: Props) {
                 </View>
               </TouchableOpacity>
             ))}
+            <TouchableOpacity
+              className="bg-[#FF6B00] py-3 rounded-xl items-center mt-3"
+              onPress={() => { onClose(); router.push("/notifications" as any); }}
+            >
+              <Text className="text-white font-bold text-sm">View All Notifications</Text>
+            </TouchableOpacity>
           </View>
         </Animated.View>
       </Pressable>

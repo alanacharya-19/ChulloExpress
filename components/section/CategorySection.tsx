@@ -26,7 +26,7 @@ function CategoryItem({ item }: any) {
   const [pressed, setPressed] = useState(false);
 
   const handlePress = () => {
-    if (item.name === "All Restro") {
+    if (item.name === "All Restro" || item.name === "More") {
       router.push("/allrestro");
     } else {
       const mapped = categoryMap[item.name];
